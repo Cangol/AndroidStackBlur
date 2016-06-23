@@ -1,0 +1,32 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = 22
+        buildToolsVersion = "22.0.0"
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = 8
+            targetSdkVersion.apiLevel = 22
+        }
+        lintOptions.with {
+            abortOnError false
+        }
+        /*
+         * native build settings
+         */
+        ndk {
+            moduleName = "stackblur"
+            toolchain = "clang"
+            stl = 'gnustl_static'
+            CFlags.addAll(['-DSTDC_HEADERS'])
+            ldLibs.addAll(['android', 'log','jnigraphics'])
+            //abiFilters.addAll(['armeabi','armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'])
+        }
+    }
+}
+
+dependencies {
+    compile 'junit:junit:4.12'
+}
+apply from: '../maven_push.gradle'
