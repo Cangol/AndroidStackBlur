@@ -6,8 +6,12 @@ model {
         buildToolsVersion = "22.0.0"
 
         defaultConfig.with {
-            minSdkVersion.apiLevel = 8
+            minSdkVersion.apiLevel = 11
             targetSdkVersion.apiLevel = 22
+            versionCode = 1
+            versionName = "1.0.0"
+            renderscriptTargetApi = 18
+            renderscriptSupportModeEnabled = true
         }
         lintOptions.with {
             abortOnError false

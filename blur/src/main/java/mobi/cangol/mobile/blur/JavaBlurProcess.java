@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
  * This is a compromise between Gaussian Blur and Box blur
  * It creates much better looking blurs than Box Blur, but is
  * 7x faster than my Gaussian Blur implementation.
-
  * I called it Stack Blur because this describes best how this
  * filter works internally: it creates a kind of moving stack
  * of colors whilst scanning through the image. Thereby it
@@ -130,8 +129,8 @@ class JavaBlurProcess implements BlurProcess {
 			for(y = minY; y < maxY; y++)
 			{
 				sum_r = sum_g = sum_b =
-				sum_in_r = sum_in_g = sum_in_b =
-				sum_out_r = sum_out_g = sum_out_b = 0;
+						sum_in_r = sum_in_g = sum_in_b =
+								sum_out_r = sum_out_g = sum_out_b = 0;
 
 				src_i = w * y; // start of line (0,y)
 
@@ -170,10 +169,10 @@ class JavaBlurProcess implements BlurProcess {
 				for(x = 0; x < w; x++)
 				{
 					src[dst_i] = (int)
-								((src[dst_i] & 0xff000000) |
-								((((sum_r * mul_sum) >>> shr_sum) & 0xff) << 16) |
-								((((sum_g * mul_sum) >>> shr_sum) & 0xff) << 8) |
-								((((sum_b * mul_sum) >>> shr_sum) & 0xff)));
+							((src[dst_i] & 0xff000000) |
+									((((sum_r * mul_sum) >>> shr_sum) & 0xff) << 16) |
+									((((sum_g * mul_sum) >>> shr_sum) & 0xff) << 8) |
+									((((sum_b * mul_sum) >>> shr_sum) & 0xff)));
 					dst_i += 1;
 
 					sum_r -= sum_out_r;
@@ -227,8 +226,8 @@ class JavaBlurProcess implements BlurProcess {
 			for(x = minX; x < maxX; x++)
 			{
 				sum_r =    sum_g =    sum_b =
-				sum_in_r = sum_in_g = sum_in_b =
-				sum_out_r = sum_out_g = sum_out_b = 0;
+						sum_in_r = sum_in_g = sum_in_b =
+								sum_out_r = sum_out_g = sum_out_b = 0;
 
 				src_i = x; // x,0
 				for(i = 0; i <= radius; i++)
@@ -265,9 +264,9 @@ class JavaBlurProcess implements BlurProcess {
 				{
 					src[dst_i] = (int)
 							((src[dst_i] & 0xff000000) |
-							((((sum_r * mul_sum) >>> shr_sum) & 0xff) << 16) |
-							((((sum_g * mul_sum) >>> shr_sum) & 0xff) << 8) |
-							((((sum_b * mul_sum) >>> shr_sum) & 0xff)));
+									((((sum_r * mul_sum) >>> shr_sum) & 0xff) << 16) |
+									((((sum_g * mul_sum) >>> shr_sum) & 0xff) << 8) |
+									((((sum_b * mul_sum) >>> shr_sum) & 0xff)));
 					dst_i += w;
 
 					sum_r -= sum_out_r;

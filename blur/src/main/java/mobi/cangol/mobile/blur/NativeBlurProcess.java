@@ -1,25 +1,26 @@
 package mobi.cangol.mobile.blur;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
-
-import android.graphics.Bitmap;
 
 /**
  * @see JavaBlurProcess
  * Blur using the NDK and native code.
  */
-public class NativeBlurProcess  implements BlurProcess{
+class NativeBlurProcess implements BlurProcess {
 	private static native void functionToBlur(Bitmap bitmapOut, int radius, int threadCount, int threadIndex, int round);
 
 	static {
 		System.loadLibrary("stackblur");
 	}
 
-	public  Bitmap blur(Bitmap original, float radius) {
+	@Override
+	public Bitmap blur(Bitmap original, float radius) {
 		Bitmap bitmapOut = original.copy(Bitmap.Config.ARGB_8888, true);
 
-		int cores =StackBlurManager.EXECUTOR_THREADS;
+		int cores = StackBlurManager.EXECUTOR_THREADS;
 
 		ArrayList<NativeTask> horizontal = new ArrayList<NativeTask>(cores);
 		ArrayList<NativeTask> vertical = new ArrayList<NativeTask>(cores);

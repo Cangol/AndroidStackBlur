@@ -5,10 +5,11 @@ android {
     defaultConfig {
         applicationId "mobi.cangol.mobile.utils"
         multiDexEnabled false
-        minSdkVersion 8
+        minSdkVersion 11
         versionCode 1
         versionName "1.0.0"
-        sourceSets.main.jniLibs.srcDirs = ['libs']
+        renderscriptTargetApi 18
+        renderscriptSupportModeEnabled true
     }
     dexOptions {
         javaMaxHeapSize "4g"

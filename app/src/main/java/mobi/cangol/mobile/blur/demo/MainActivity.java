@@ -3,6 +3,7 @@ package mobi.cangol.mobile.blur.demo;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
     private TextView textView2;
 
     private StackBlurManager stackBlurManager;
+    private final static int RADIUS=70;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +34,69 @@ public class MainActivity extends Activity {
         imageView1= (ImageView) findViewById(R.id.imageView1);
         imageView2= (ImageView) findViewById(R.id.imageView2);
         stackBlurManager=new StackBlurManager(BitmapFactory.decodeResource(getResources(),R.mipmap.test));
+        blurJava();
+        blurRs();
+        blurNative();
 
-        long curTime1=System.currentTimeMillis();
-        Bitmap bitmap1=stackBlurManager.processJava(70);
-        textView1.setText("Java:"+(System.currentTimeMillis()-curTime1)+"ms");
-        imageView1.setImageBitmap(bitmap1);
+    }
+    private void blurJava(){
+        AsyncTask<Void,Void,Bitmap> asyncTask=new AsyncTask<Void,Void,Bitmap>() {
+            long idleTime=0;
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                long curTime=System.currentTimeMillis();
+                Bitmap bitmap= stackBlurManager.process(RADIUS);
+                idleTime=System.currentTimeMillis()-curTime;
+                return bitmap;
+            }
 
-        long curTime2=System.currentTimeMillis();
-        Bitmap bitmap2=stackBlurManager.processNative(70);
-        textView2.setText("Native:"+(System.currentTimeMillis()-curTime2)+"ms");
-        imageView2.setImageBitmap(bitmap2);
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                textView0.setText("Java:"+idleTime+"ms");
+                imageView0.setImageBitmap(bitmap);
+            }
+        };
+        asyncTask.execute();
+    }
+    private void blurRs(){
+        AsyncTask<Void,Void,Bitmap> asyncTask=new AsyncTask<Void,Void,Bitmap>() {
+            long idleTime=0;
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                long curTime=System.currentTimeMillis();
+                Bitmap bitmap= stackBlurManager.processRenderScript(MainActivity.this,RADIUS);
+                idleTime=System.currentTimeMillis()-curTime;
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                textView1.setText("Rs:"+idleTime+"ms");
+                imageView1.setImageBitmap(bitmap);
+            }
+        };
+        asyncTask.execute();
+    }
+    private void blurNative(){
+        AsyncTask<Void,Void,Bitmap> asyncTask=new AsyncTask<Void,Void,Bitmap>() {
+            long idleTime=0;
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                long curTime=System.currentTimeMillis();
+                Bitmap bitmap= stackBlurManager.processNatively(RADIUS);
+                idleTime=System.currentTimeMillis()-curTime;
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                textView2.setText("Native:"+idleTime+"ms");
+                imageView2.setImageBitmap(bitmap);
+            }
+        };
+        asyncTask.execute();
     }
 }
