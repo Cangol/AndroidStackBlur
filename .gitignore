@@ -16,6 +16,7 @@ gen/
 # Gradle files
 .gradle/
 build/
+blur/.externalNativeBuild/
 gradlew.bat
 gradlew
 

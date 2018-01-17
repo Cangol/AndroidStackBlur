@@ -1,31 +1,39 @@
-apply plugin: 'com.android.model.library'
+apply plugin: 'com.android.library'
 
-model {
-    android {
-        compileSdkVersion = 22
-        buildToolsVersion = "22.0.0"
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
-        defaultConfig.with {
-            minSdkVersion.apiLevel = 11
-            targetSdkVersion.apiLevel = 22
-            versionCode = 1
-            versionName = "1.0.0"
-            renderscriptTargetApi = 18
-            renderscriptSupportModeEnabled = true
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
+        externalNativeBuild {
+            cmake {
+                cFlags '-DSTDC_HEADERS'
+                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static'
+            }
         }
-        lintOptions.with {
-            abortOnError false
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
         }
-        /*
-         * native build settings
-         */
-        ndk {
-            moduleName = "stackblur"
-            toolchain = "clang"
-            stl = 'gnustl_static'
-            CFlags.addAll(['-DSTDC_HEADERS'])
-            ldLibs.addAll(['android', 'log','jnigraphics'])
-            //abiFilters.addAll(['armeabi','armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'])
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+        }
+    }
+    lintOptions.with {
+        abortOnError false
+    }
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
         }
     }
 }
