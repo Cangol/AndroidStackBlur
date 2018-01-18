@@ -16,6 +16,7 @@ licenses:
   - 'android-sdk-preview-license-52d11cd2'
   - 'android-sdk-license-.+'
   - 'google-gdk-license-.+'
+  - 'cmake;3.6.4111459'
 before_install:
     # Gradle
     - wget -q http://services.gradle.org/distributions/gradle-4.1-all.zip
