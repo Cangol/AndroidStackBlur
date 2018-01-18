@@ -31,6 +31,15 @@ before_install:
 #    - unzip -oq android-ndk-r16b-linux-x86_64.zip
 #    - rm android-ndk-r16b-linux-x86_64.zip
 #    - export ANDROID_NDK_HOME=$HOME/android-ndk-r16b
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager --update
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'tools'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'platform-tools'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;android;m2repository'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;google_play_services'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;m2repository'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'cmake;3.6.4111459'
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'ndk-bundle' # Remove if you don't need NDK
+
 # Emulator Management: Create, Start and Wait
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
