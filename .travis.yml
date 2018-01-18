@@ -1,7 +1,7 @@
 language: android
 #jdk:
 #  - oraclejdk7
-#sudo: true
+sudo: true
 android:
   components:
     - tools
@@ -12,19 +12,24 @@ android:
     - extra-android-m2repository
     - extra-android-support
     - sys-img-armeabi-v7a-android-22
+addons:
+  apt_packages:
+    - pandoc
+  artifacts:
+    paths:
+      - $(git ls-files -o | grep app/build/outputs | tr "\n" ":")
 before_install:
     # Gradle
     - wget -q http://services.gradle.org/distributions/gradle-4.1-all.zip
     - unzip -q gradle-4.1-all.zip
-    - export GRADLE_HOME=$PWD/gradle-2.10
+    - export GRADLE_HOME=$PWD/gradle-4.1
     - export PATH=$GRADLE_HOME/bin:$PATH
     # Get Android NDK
-    - git clone https://github.com/urho3d/android-ndk.git $HOME/android-ndk-root
-    - export ANDROID_NDK_HOME=$HOME/android-ndk-root
-#    - wget  -q http://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip
-#    - unzip -q android-ndk-r11c-linux-x86_64.zip
-#    - export ANDROID_NDK_HOME=$PWD/android-ndk-r11c-linux-x86_64
-#    - export PATH=$ANDROID_NDK_HOME:$PATH
+    - rm -fr $HOME/android-ndk-r16b
+    - curl -L http://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip -O
+    - unzip -oq android-ndk-r16b-linux-x86_64.zip
+    - rm android-ndk-r16b-linux-x86_64.zip
+    - export ANDROID_NDK_HOME=$HOME/android-ndk-r16b
 # Emulator Management: Create, Start and Wait
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
